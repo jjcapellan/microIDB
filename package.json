@@ -1,17 +1,17 @@
 {
-    "name": "tiny-idb",
+    "name": "microidb",
     "version": "0.1.0",
     "description": "Minimal and easy to use wrapper for IndexedDB",
-    "main": "dist/index.js",
-    "umd:main": "dist/index.umd.js",
-    "module": "dist/index.ems.js",
-    "source": "src/index.ts",
-    "types": "dist/index.d.ts",
+    "main": "dist/microidb.js",
+    "umd:main": "dist/microidb.umd.js",
+    "module": "dist/microidb.ems.js",
+    "source": "src/microidb.ts",
+    "types": "dist/microidb.d.ts",
     "scripts": {
-      "build:dev": "microbundle -f umd --name TinyIDB -o devbuild --no-generateTypes",
-      "build:dist": "microbundle -f cjs,umd,es --name TinyIDB --sourcemap false && npm run copytypes",
-      "copytypes": "cpy 'dist/index.d.ts' . --rename='index.ems.d.ts' && cpy 'dist/index.d.ts' . --rename='index.umd.d.ts'",
-      "dev": "microbundle watch -f umd --name TinyIDB"
+      "build:dev": "microbundle -f umd --name idb -o devbuild --no-generateTypes",
+      "build:dist": "microbundle -f cjs,umd,es --name idb --sourcemap false && npm run copytypes",
+      "copytypes": "cpy 'dist/microidb.d.ts' . --rename='microidb.ems.d.ts' && cpy 'dist/microidb.d.ts' . --rename='microidb.umd.d.ts'",
+      "dev": "microbundle watch -f umd --name idb"
     },
     "keywords": [
       "indexedDB",
@@ -20,7 +20,7 @@
     ],
     "repository": {
       "type": "git",
-      "url": "https://github.com/jjcapellan/tiny-idb"
+      "url": "https://github.com/jjcapellan/microIDB"
     },
     "author": "Juan Jose Capellan",
     "license": "MIT",

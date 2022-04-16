@@ -1,4 +1,3 @@
-const idb = TinyIDB;
 const list = document.getElementById('list');
 
 const obj1 = { a: 12, b: 24, c: 48 };
