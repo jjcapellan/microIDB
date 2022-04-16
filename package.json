@@ -1,7 +1,7 @@
 {
     "name": "tiny-idb",
     "version": "0.1.0",
-    "description": "Minimal wrapper for IndexedDB",
+    "description": "Minimal and easy to use wrapper for IndexedDB",
     "main": "dist/index.js",
     "umd:main": "dist/index.umd.js",
     "module": "dist/index.ems.js",
