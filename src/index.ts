@@ -16,7 +16,7 @@ let tasks: { fn: (key: string, value: boolean | any, callback: (res: any) => voi
 /////////////////////////////
 
 
-function clear(onComplete: (res: boolean) => void) {
+function clear(onComplete: (res: boolean) => void = VOID) {
     let task = { fn: execClear, key: null, value: null, onComplete: onComplete };
     tasks.push(task);
     if (isIdle) {
@@ -26,7 +26,7 @@ function clear(onComplete: (res: boolean) => void) {
 
 
 
-function set(key: string, value: any, onComplete: (res: boolean) => void) {
+function set(key: string, value: any, onComplete: (res: boolean) => void = VOID) {
     let task = { fn: execSet, key: key, value: value, onComplete: onComplete };
     tasks.push(task);
     if (isIdle) {
@@ -36,7 +36,7 @@ function set(key: string, value: any, onComplete: (res: boolean) => void) {
 
 
 
-function remove(key: string, onComplete: (res: boolean) => void) {
+function remove(key: string, onComplete: (res: boolean) => void = VOID) {
     let task = { fn: execRemove, key: key, value: null, onComplete: onComplete };
     tasks.push(task);
     if (isIdle) {
