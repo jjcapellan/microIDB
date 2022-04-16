@@ -1,8 +1,8 @@
 // IndexedDB support info from: https://caniuse.com/?search=indexedDB
 
 /**
- * Checks if we can use indexedDB in this system.
- * @returns IndexedDB is supported in this browser?
+ * Checks if we can use microIDB in this system.
+ * @returns microIDB is supported in this browser?
  */
 function checkSupport(): boolean {
 
