@@ -8,10 +8,10 @@
     "source": "src/microidb.ts",
     "types": "dist/microidb.d.ts",
     "scripts": {
-      "build:dev": "microbundle -f umd --name idb -o devbuild --no-generateTypes",
+      "build:dev": "microbundle -f umd --name idb -o test/devbuild --no-generateTypes",
       "build:dist": "microbundle -f cjs,umd,es --name idb --sourcemap false && npm run copytypes",
       "copytypes": "cpy 'dist/microidb.d.ts' . --rename='microidb.ems.d.ts' && cpy 'dist/microidb.d.ts' . --rename='microidb.umd.d.ts'",
-      "dev": "microbundle watch -f umd --name idb -o devbuild --no-generateTypes"
+      "dev": "microbundle watch -f umd --name idb -o test/devbuild --no-generateTypes"
     },
     "keywords": [
       "indexedDB",
