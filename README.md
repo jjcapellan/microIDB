@@ -4,6 +4,7 @@ Minimal and easy to use wrapper for [IndexedDB](https://developer.mozilla.org/en
 ---
 
 ## Features
+* Small size (browser bundle ~1Kb gziped)
 * Stores data on browser storage.
 * Retrieves data from browser storage.
 * Removes data from browser storage.

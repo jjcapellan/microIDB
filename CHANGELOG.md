@@ -1,6 +1,11 @@
+# V0.2.0
+## New features
+* **exists**: Checks for key existence    
+
+
 # V0.1.0
 ## Features
-* Stores data on browser storage.
-* Retrieves data from browser storage.
-* Removes data from browser storage.
-* Checks browser support.
+* **set**: Stores data on browser storage.
+* **get**: Retrieves data from browser storage.
+* **remove**: Removes data from browser storage.
+* **checkSupport**: Checks browser support.
