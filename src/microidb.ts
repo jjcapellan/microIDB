@@ -74,7 +74,12 @@ function get(key: string, onComplete: (result: any) => void) {
 }
 
 
-function exists(key: string, onComplete: (exists: boolean) => void = VOID) {
+/**
+ * Checks for key existence.
+ * @param key The key to check.
+ * @param onComplete This callback receives true if the key is present in the database.
+ */
+function exists(key: string, onComplete: (exists: boolean) => void) {
     let task = { fn: execExists, key: key, value: null, onComplete: onComplete };
     tasks.push(task);
     if (isIdle) {
