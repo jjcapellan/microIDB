@@ -74,6 +74,15 @@ function get(key: string, onComplete: (result: any) => void) {
 }
 
 
+function exists(key: string, onComplete: (exists: boolean) => void = VOID) {
+    let task = { fn: execExists, key: key, value: null, onComplete: onComplete };
+    tasks.push(task);
+    if (isIdle) {
+        checkTask();
+    }
+}
+
+
 
 
 
@@ -256,6 +265,39 @@ async function execSet(key: string, value: any, onComplete: (res: boolean) => an
 } // end execSet()
 
 
+async function execExists(key: string, value: any, onComplete: (res: boolean) => any = VOID) {
+    let ok = true;
+
+    if (!db) {
+        ok = await open();
+        if (!ok) {
+            onComplete(false);
+            checkTask();
+        }
+    }
+
+    if (db.objectStoreNames.length == 0) {
+        ok = await createStore();
+        if (!ok) {
+            onComplete(false);
+            checkTask();
+        }
+    }
+
+    const tr = db.transaction(STORE_NAME, 'readwrite').objectStore(STORE_NAME).count(key);
+
+    tr.onerror = () => {
+        onComplete(false);
+        checkTask();
+    }
+
+    tr.onsuccess = () => {
+        onComplete(tr.result > 0);
+        checkTask();
+    }
+}
+
+
 
 function open(): Promise<boolean> {
 
@@ -281,4 +323,4 @@ function open(): Promise<boolean> {
 
 
 
-export { checkSupport, clear, get, remove, set }
+export { checkSupport, clear, exists, get, remove, set }

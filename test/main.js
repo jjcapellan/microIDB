@@ -15,6 +15,27 @@ idb.set('key1', obj1, (r) => {
 
 
 
+// exists() Check if key exists
+/////////////////////////////
+idb.exists('key1', (r) => {
+    if (r === true) {
+        count++;
+    }
+});
+idb.exists('nokey', (r) => {
+    if (r === false) {
+        count++;
+    }
+    if (count == 2) {
+        show('exists() ---> OK');
+    } else {
+        show('set() ---> FAIL');
+    }
+    count = 0;
+})
+
+
+
 // get() Retrieve an object 
 /////////////////////////////
 idb.get('key1', (r) => {
@@ -38,10 +59,10 @@ idb.get('key1', (r) => {
     if (r == null) {
         count++;
         if (count = 2) {
-            count = 0;
             show('remove() ---> OK');
         }
     }
+    count = 0;
 });
 
 
@@ -74,6 +95,7 @@ idb.get('k4', (r) => {
             show('clear() ---> FAIL');
         }
     }
+    count = 0;
 })
 
 
