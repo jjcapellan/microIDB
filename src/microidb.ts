@@ -1,8 +1,8 @@
 import { checkSupport } from "./support";
 
 
-const DB_NAME = 'tinyDB';
-const STORE_NAME = 'tinyObjStore';
+const DB_NAME = 'microiDB';
+const STORE_NAME = 'microObjStore';
 const VOID = () => { };
 
 let db: IDBDatabase = null;
@@ -180,7 +180,7 @@ async function execGet(key: string, value: any, onComplete: (res: any) => void =
     }
 
     if (db.objectStoreNames.length == 0) {
-        console.warn('TinyIdb database is empty');
+        console.warn(`${DB_NAME} database is empty`);
         onComplete(null);
         checkTask();
     }
@@ -211,7 +211,7 @@ async function execRemove(key: string, value: any, onComplete: (res: any) => voi
     }
 
     if (db.objectStoreNames.length == 0) {
-        console.warn('TinyIdb database is empty');
+        console.warn(`${DB_NAME} database is empty`);
         onComplete(false);
         checkTask();
     }
