@@ -26,4 +26,10 @@ declare function remove(key: string, onComplete?: (ok: boolean) => void): void;
  * @param onComplete This callback receives the retrieved data.
  */
 declare function get(key: string, onComplete: (result: any) => void): void;
-export { checkSupport, clear, get, remove, set };
+/**
+ * Checks for key existence.
+ * @param key The key to check.
+ * @param onComplete This callback receives true if the key is present in the database.
+ */
+declare function exists(key: string, onComplete: (exists: boolean) => void): void;
+export { checkSupport, clear, exists, get, remove, set };

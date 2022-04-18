@@ -7,6 +7,7 @@ Minimal and easy to use wrapper for [IndexedDB](https://developer.mozilla.org/en
 * Stores data on browser storage.
 * Retrieves data from browser storage.
 * Removes data from browser storage.
+* Checks for key existence. 
 * Checks browser support.
   
   
@@ -63,6 +64,13 @@ idb.remove('myKey');
 
 // Clear all stored data
 idb.clear();
+
+// Check key existence
+idb.exists('mykey', (exists) => {
+    if(exists){
+        console.log('There is data stored with key "mykey" in the database');
+    }
+})
 ```
   
 
@@ -83,6 +91,9 @@ This function removes the data identified by *key*. The optional callback *onCom
 ### **clear()**
 This function removes all data.  
 
+### **exists(key: string, onComplete: (exists: boolean) => void)**
+This function checks for *key* existence in the database. *onComplete* receives *true* if *key* is present in the database.
+
 ### **checkSupport(): boolean**
 This function returns *true* if microIDB is supported by the browser.  
 Actually these are the browsers supported:
@@ -91,7 +102,6 @@ Actually these are the browsers supported:
 * Firefox 16+
 * Opera 15+
 * Safari 15+
-  
 
 ---
   
