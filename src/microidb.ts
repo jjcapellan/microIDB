@@ -96,8 +96,9 @@ function exists(key: string, onComplete: (exists: boolean) => void) {
 ///////////////////////////////
 
 
-function checkTask() {
+async function checkTask() {
     let task = tasks.shift();
+    let ok = true;
 
     if (!task) {
         isIdle = true;
@@ -105,6 +106,25 @@ function checkTask() {
     }
 
     isIdle = false;
+
+    if (!db) {
+        ok = await open();
+        if (!ok) {
+            task.onComplete(false);
+            console.error('Error opening database');
+            return;
+        }
+    }
+
+    if (db.objectStoreNames.length == 0) {
+        ok = await createStore();
+        if (!ok) {
+            task.onComplete(false);
+            console.error('Error opening objectStore');
+            return;
+        }
+    }
+
     task.fn(task.key, task.value, task.onComplete);
 }
 
@@ -141,24 +161,6 @@ function createStore(): Promise<boolean> {
 
 async function execClear(key: string, value: any, onComplete: (res: boolean) => any = VOID) {
 
-    let ok = true;
-
-    if (!db) {
-        ok = await open();
-        if (!ok) {
-            onComplete(false);
-            checkTask();
-        }
-    }
-
-    if (db.objectStoreNames.length == 0) {
-        ok = await createStore();
-        if (!ok) {
-            onComplete(false);
-            checkTask();
-        }
-    }
-
     const tr = db.transaction(STORE_NAME, 'readwrite').objectStore(STORE_NAME).clear();
 
     tr.onerror = () => {
@@ -175,20 +177,6 @@ async function execClear(key: string, value: any, onComplete: (res: boolean) => 
 
 
 async function execGet(key: string, value: any, onComplete: (res: any) => void = VOID) {
-
-    if (!db) {
-        let ok = await open();
-        if (!ok) {
-            onComplete(null);
-            checkTask()
-        }
-    }
-
-    if (db.objectStoreNames.length == 0) {
-        console.warn(`${DB_NAME} database is empty`);
-        onComplete(null);
-        checkTask();
-    }
 
     const tr = db.transaction(STORE_NAME, 'readonly').objectStore(STORE_NAME).get(key);
 
@@ -207,20 +195,6 @@ async function execGet(key: string, value: any, onComplete: (res: any) => void =
 
 async function execRemove(key: string, value: any, onComplete: (res: any) => void = VOID) {
 
-    if (!db) {
-        let ok = await open();
-        if (!ok) {
-            onComplete(false);
-            checkTask()
-        }
-    }
-
-    if (db.objectStoreNames.length == 0) {
-        console.warn(`${DB_NAME} database is empty`);
-        onComplete(false);
-        checkTask();
-    }
-
     const tr = db.transaction(STORE_NAME, 'readwrite').objectStore(STORE_NAME).delete(key);
 
     tr.onsuccess = () => {
@@ -238,24 +212,6 @@ async function execRemove(key: string, value: any, onComplete: (res: any) => voi
 
 async function execSet(key: string, value: any, onComplete: (res: boolean) => any = VOID) {
 
-    let ok = true;
-
-    if (!db) {
-        ok = await open();
-        if (!ok) {
-            onComplete(false);
-            checkTask();
-        }
-    }
-
-    if (db.objectStoreNames.length == 0) {
-        ok = await createStore();
-        if (!ok) {
-            onComplete(false);
-            checkTask();
-        }
-    }
-
     const tr = db.transaction(STORE_NAME, 'readwrite').objectStore(STORE_NAME).put(value, key);
 
     tr.onerror = () => {
@@ -271,23 +227,6 @@ async function execSet(key: string, value: any, onComplete: (res: boolean) => an
 
 
 async function execExists(key: string, value: any, onComplete: (res: boolean) => any = VOID) {
-    let ok = true;
-
-    if (!db) {
-        ok = await open();
-        if (!ok) {
-            onComplete(false);
-            checkTask();
-        }
-    }
-
-    if (db.objectStoreNames.length == 0) {
-        ok = await createStore();
-        if (!ok) {
-            onComplete(false);
-            checkTask();
-        }
-    }
 
     const tr = db.transaction(STORE_NAME, 'readwrite').objectStore(STORE_NAME).count(key);
 
