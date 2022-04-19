@@ -186,7 +186,7 @@ async function execGet(key: string, value: any, onComplete: (res: any) => void =
     };
 
     tr.onerror = () => {
-        onComplete(null);
+        onComplete(false);
         checkTask();
     };
 } // end execGet()
