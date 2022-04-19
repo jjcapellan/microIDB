@@ -269,9 +269,8 @@ async function execSet(key: string, value: any, onComplete: (res: boolean) => an
 } // end execSet()
 
 
-
+// agent supposed must be lowercase
 function getBrowserVersion(agent: string, mark: string, length: number): number {
-    agent = agent.toLowerCase();
     let posX = agent.indexOf(mark) + mark.length;
     if (posX < mark.length) {
         return 0;
