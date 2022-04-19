@@ -3,6 +3,14 @@ const list = document.getElementById('list');
 const obj1 = { a: 12, b: 24, c: 48 };
 let count = 0;
 
+// Check support
+/////////////////////////////
+if(idb.checkSupport()){
+    show('checkSupport() Is this browser supported? ---> YES');
+} else {
+    show('checkSupport() Is this browser supported? ---> NOT');
+}
+
 // Add an object
 /////////////////////////////
 idb.set('key1', obj1, (r) => {
@@ -56,7 +64,7 @@ idb.remove('key1', (r) => {
     }
 });
 idb.get('key1', (r) => {
-    if (r == null) {
+    if (r == false) {
         count++;
         if (count = 2) {
             show('remove() ---> OK');
