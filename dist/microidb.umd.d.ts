@@ -1,4 +1,8 @@
-import { checkSupport } from "./support";
+/**
+ * Checks if we can use microIDB in this system.
+ * @returns microIDB is supported in this browser?
+ */
+declare function checkSupport(): boolean;
 /**
  * Removes all stored data.
  * @param onComplete Optional callback. Receives *true* if all is ok, or *false*
@@ -6,13 +10,17 @@ import { checkSupport } from "./support";
  */
 declare function clear(onComplete?: (ok: boolean) => void): void;
 /**
- * Stores data in the browser storage.
- * @param key Identifies the data.
- * @param value Data to be saved (object, number, array, ...).
- * @param onComplete Optional callback. Receives *true* if all is ok, or *false*
- * if the operation could not be completed.
+ * Checks for key existence.
+ * @param key The key to check.
+ * @param onComplete This callback receives true if the key is present in the database.
  */
-declare function set(key: string, value: any, onComplete?: (ok: boolean) => void): void;
+declare function exists(key: string, onComplete: (exists: boolean) => void): void;
+/**
+ * Retrieves data from browser storage.
+ * @param key Identifies the data.
+ * @param onComplete This callback receives the retrieved data.
+ */
+declare function get(key: string, onComplete: (result: any) => void): void;
 /**
  * Removes a data.
  * @param key Identifies the data.
@@ -21,15 +29,11 @@ declare function set(key: string, value: any, onComplete?: (ok: boolean) => void
  */
 declare function remove(key: string, onComplete?: (ok: boolean) => void): void;
 /**
- * Retrieves data from browser storage.
+ * Stores data in the browser storage.
  * @param key Identifies the data.
- * @param onComplete This callback receives the retrieved data.
+ * @param value Data to be saved (object, number, array, ...).
+ * @param onComplete Optional callback. Receives *true* if all is ok, or *false*
+ * if the operation could not be completed.
  */
-declare function get(key: string, onComplete: (result: any) => void): void;
-/**
- * Checks for key existence.
- * @param key The key to check.
- * @param onComplete This callback receives true if the key is present in the database.
- */
-declare function exists(key: string, onComplete: (exists: boolean) => void): void;
+declare function set(key: string, value: any, onComplete?: (ok: boolean) => void): void;
 export { checkSupport, clear, exists, get, remove, set };
