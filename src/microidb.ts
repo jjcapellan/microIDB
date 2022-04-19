@@ -9,83 +9,8 @@ let tasks: { fn: (key: string, value: boolean | any, callback: (res: any) => voi
 
 
 
-
 //// PUBLIC API
 /////////////////////////////
-
-/**
- * Removes all stored data.
- * @param onComplete Optional callback. Receives *true* if all is ok, or *false* 
- * if the operation could not be completed.
- */
-function clear(onComplete: (ok: boolean) => void = VOID) {
-    let task = { fn: execClear, key: null, value: null, onComplete: onComplete };
-    tasks.push(task);
-    if (isIdle) {
-        checkTask();
-    }
-}
-
-
-/**
- * Stores data in the browser storage.
- * @param key Identifies the data.
- * @param value Data to be saved (object, number, array, ...).
- * @param onComplete Optional callback. Receives *true* if all is ok, or *false* 
- * if the operation could not be completed.
- */
-function set(key: string, value: any, onComplete: (ok: boolean) => void = VOID) {
-    let task = { fn: execSet, key: key, value: value, onComplete: onComplete };
-    tasks.push(task);
-    if (isIdle) {
-        checkTask();
-    }
-}
-
-
-/**
- * Removes a data.
- * @param key Identifies the data.
- * @param onComplete Optional callback. Receives *true* if all is ok, or *false* 
- * if the operation could not be completed.
- */
-function remove(key: string, onComplete: (ok: boolean) => void = VOID) {
-    let task = { fn: execRemove, key: key, value: null, onComplete: onComplete };
-    tasks.push(task);
-    if (isIdle) {
-        checkTask();
-    }
-}
-
-
-/**
- * Retrieves data from browser storage.
- * @param key Identifies the data.
- * @param onComplete This callback receives the retrieved data.
- */
-function get(key: string, onComplete: (result: any) => void) {
-    let task = { fn: execGet, key: key, value: null, onComplete: onComplete };
-    tasks.push(task);
-    if (isIdle) {
-        checkTask();
-    }
-}
-
-
-/**
- * Checks for key existence.
- * @param key The key to check.
- * @param onComplete This callback receives true if the key is present in the database.
- */
-function exists(key: string, onComplete: (exists: boolean) => void) {
-    let task = { fn: execExists, key: key, value: null, onComplete: onComplete };
-    tasks.push(task);
-    if (isIdle) {
-        checkTask();
-    }
-}
-
-
 
 /**
  * Checks if we can use microIDB in this system.
@@ -114,13 +39,88 @@ function checkSupport(): boolean {
 
 
 
+/**
+ * Removes all stored data.
+ * @param onComplete Optional callback. Receives *true* if all is ok, or *false* 
+ * if the operation could not be completed.
+ */
+function clear(onComplete: (ok: boolean) => void = VOID) {
+    let task = { fn: execClear, key: null, value: null, onComplete: onComplete };
+    tasks.push(task);
+    if (isIdle) {
+        checkTask();
+    }
+}
+
+
+
+/**
+ * Checks for key existence.
+ * @param key The key to check.
+ * @param onComplete This callback receives true if the key is present in the database.
+ */
+function exists(key: string, onComplete: (exists: boolean) => void) {
+    let task = { fn: execExists, key: key, value: null, onComplete: onComplete };
+    tasks.push(task);
+    if (isIdle) {
+        checkTask();
+    }
+}
+
+
+
+/**
+ * Retrieves data from browser storage.
+ * @param key Identifies the data.
+ * @param onComplete This callback receives the retrieved data.
+ */
+function get(key: string, onComplete: (result: any) => void) {
+    let task = { fn: execGet, key: key, value: null, onComplete: onComplete };
+    tasks.push(task);
+    if (isIdle) {
+        checkTask();
+    }
+}
+
+
+
+/**
+ * Removes a data.
+ * @param key Identifies the data.
+ * @param onComplete Optional callback. Receives *true* if all is ok, or *false* 
+ * if the operation could not be completed.
+ */
+function remove(key: string, onComplete: (ok: boolean) => void = VOID) {
+    let task = { fn: execRemove, key: key, value: null, onComplete: onComplete };
+    tasks.push(task);
+    if (isIdle) {
+        checkTask();
+    }
+}
+
+
+
+/**
+ * Stores data in the browser storage.
+ * @param key Identifies the data.
+ * @param value Data to be saved (object, number, array, ...).
+ * @param onComplete Optional callback. Receives *true* if all is ok, or *false* 
+ * if the operation could not be completed.
+ */
+function set(key: string, value: any, onComplete: (ok: boolean) => void = VOID) {
+    let task = { fn: execSet, key: key, value: value, onComplete: onComplete };
+    tasks.push(task);
+    if (isIdle) {
+        checkTask();
+    }
+}
+
 
 
 
 
 //// PRIVATE FUNCTIONS
 ///////////////////////////////
-
 
 async function checkTask() {
     let task = tasks.shift();
@@ -152,7 +152,7 @@ async function checkTask() {
     }
 
     task.fn(task.key, task.value, task.onComplete);
-}
+} // end checkTask()
 
 
 
@@ -198,7 +198,24 @@ async function execClear(key: string, value: any, onComplete: (res: boolean) => 
         onComplete(true);
         checkTask();
     }
-} // end execSet()
+} // end execClear()
+
+
+
+async function execExists(key: string, value: any, onComplete: (res: boolean) => any = VOID) {
+
+    const tr = db.transaction(STORE_NAME, 'readwrite').objectStore(STORE_NAME).count(key);
+
+    tr.onerror = () => {
+        onComplete(false);
+        checkTask();
+    }
+
+    tr.onsuccess = () => {
+        onComplete(tr.result > 0);
+        checkTask();
+    }
+} // end execExist()
 
 
 
@@ -250,22 +267,6 @@ async function execSet(key: string, value: any, onComplete: (res: boolean) => an
         checkTask();
     }
 } // end execSet()
-
-
-async function execExists(key: string, value: any, onComplete: (res: boolean) => any = VOID) {
-
-    const tr = db.transaction(STORE_NAME, 'readwrite').objectStore(STORE_NAME).count(key);
-
-    tr.onerror = () => {
-        onComplete(false);
-        checkTask();
-    }
-
-    tr.onsuccess = () => {
-        onComplete(tr.result > 0);
-        checkTask();
-    }
-}
 
 
 
