@@ -1,70 +1,23 @@
-// IndexedDB support info from: https://caniuse.com/?search=indexedDB
-
 /**
  * Checks if we can use microIDB in this system.
  * @returns microIDB is supported in this browser?
  */
 function checkSupport(): boolean {
 
-    if (!indexedDB) {
+    if (window && !window.indexedDB) {
         return false;
     }
 
     const agent = navigator.userAgent.toLowerCase();
-    let isSupported = false;
+    const regex = new RegExp(/.+(ipod|iphone|ipad|macintosh).+version\/.+safari.+/);
+    let isSupported = true;
 
-    switch (true) {
-        case agent.indexOf('edge') > -1: // Edge
+
+    // Some Safari versions with indexedDB support has important bugs: https://caniuse.com/?search=indexedDB
+    if (regex.test(agent) && agent.indexOf('edgios') == -1) {
+        if (getBrowserVersion(agent, 'version/', 2) < 10 || agent.indexOf('version/14.1') > -1) {
             isSupported = false;
-            break;
-
-        case agent.indexOf('edg/') > -1: // Edge 79+ (uses chromium)
-            isSupported = true;
-            break;
-
-        // @ts-ignore
-        case agent.indexOf('opr') > -1 && !!window.opr: // Opera
-            isSupported = true;
-            if (getBrowserVersion(agent, 'opr/', 2) < 15) {
-                isSupported = false;
-            }
-            break;
-
-        // @ts-ignore
-        case agent.indexOf('chrome') > -1 && !!window.chrome: // Chrome
-            isSupported = true;
-            if (getBrowserVersion(agent, 'chrome/', 2) < 48) {
-                isSupported = false;
-            }
-            break;
-
-        case agent.indexOf('trident') > -1: // IE
-            isSupported = false;
-            break;
-
-        case agent.indexOf('firefox') > -1: // Firefox
-            isSupported = true;
-            if (getBrowserVersion(agent, 'firefox/', 2) < 16) {
-                isSupported = false;
-            }
-            break;
-
-        case agent.indexOf('safari') > -1 && agent.indexOf('mobile') > -1: // Safari IOS
-            isSupported = true;
-            if (getBrowserVersion(agent, 'version/', 2) < 15) {
-                isSupported = false;
-            }
-            break;
-
-        case agent.indexOf('safari') > -1 && (agent.indexOf('mobile') == -1): // Safari MacOS
-            isSupported = true;
-            if (getBrowserVersion(agent, 'version/', 2) < 15) {
-                isSupported = false;
-            }
-            break;
-
-        default:
-            break;
+        }
     }
 
     return isSupported;
