@@ -18,13 +18,13 @@ Minimal and easy to use wrapper for [IndexedDB](https://developer.mozilla.org/en
 ## Installation
 ### Browser
 There are two alternatives:
-* Download the file [microidb.umd.js](https://cdn.jsdelivr.net/gh/jjcapellan/microIDB@1.0.0/dist/microidb.umd.js) to your project folder and add a reference in your html:
+* Download the file [microidb.umd.js](https://cdn.jsdelivr.net/gh/jjcapellan/microIDB@0.2.0/dist/microidb.umd.js) to your project folder and add a reference in your html:
 ```html
 <script src = "microidb.umd.js"></script>
 ```  
 * Point a script tag to the CDN link:
 ```html
-<script src = "https://cdn.jsdelivr.net/gh/jjcapellan/microIDB@0.1.0/dist/microidb.umd.js"></script>
+<script src = "https://cdn.jsdelivr.net/gh/jjcapellan/microIDB@0.2.0/dist/microidb.umd.js"></script>
 ```  
 **Important**: the library is exposed as **idb**
 ### From NPM
