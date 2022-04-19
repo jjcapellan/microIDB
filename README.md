@@ -85,7 +85,7 @@ It is similar to the api of localStorage, but in this case indexedDB is asynchro
 This function stores a data *value* in the browser storage identified by a *key*. The optional callback *onComplete* receives *true* if all is ok, or *false* if the operation could not be completed.  
 
 ### **get(key: string, onComplete: (result: any) => void)**
-This function retrieves the data identified by *key*. *onComplete* receives the retrieved data.
+This function retrieves the data identified by *key*. *onComplete* receives the retrieved data or *false* if the operation could not be completed.
 ### **remove(key: string, onComplete?: (ok: boolean) => void)**
 This function removes the data identified by *key*. The optional callback *onComplete* receives *true* if all is ok, or *false* if the operation could not be completed.  
 
@@ -96,13 +96,15 @@ This function removes all data.
 This function checks for *key* existence in the database. *onComplete* receives *true* if *key* is present in the database.
 
 ### **checkSupport(): boolean**
-This function returns *true* if microIDB is supported by the browser.  
+This function returns *true* if microIDB is supported by the browser. 
+Any browser with IndexedDB 1.0 api compatibility is supported. Some browsers with known bugs were excluded. 
 Actually these are the browsers supported:
-* Edge 79+
-* Chrome 48+
+* IE 10+
+* Edge 12+
+* Chrome 24+
 * Firefox 16+
 * Opera 15+
-* Safari 15+
+* Safari 10+ (14.1 not supported)
 
 ---
   
