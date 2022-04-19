@@ -1,5 +1,3 @@
-import { checkSupport } from "./support";
-
 
 const DB_NAME = 'microiDB';
 const STORE_NAME = 'microObjStore';
@@ -86,6 +84,34 @@ function exists(key: string, onComplete: (exists: boolean) => void) {
         checkTask();
     }
 }
+
+
+
+/**
+ * Checks if we can use microIDB in this system.
+ * @returns microIDB is supported in this browser?
+ */
+function checkSupport(): boolean {
+
+    if (window && !window.indexedDB) {
+        return false;
+    }
+
+    const agent = navigator.userAgent.toLowerCase();
+    const regex = new RegExp(/.+(ipod|iphone|ipad|macintosh).+version\/.+safari.+/);
+    let isSupported = true;
+
+
+    // Some Safari versions with indexedDB support has important bugs: https://caniuse.com/?search=indexedDB
+    if (regex.test(agent) && agent.indexOf('edgios') == -1) {
+        if (getBrowserVersion(agent, 'version/', 2) < 10 || agent.indexOf('version/14.1') > -1) {
+            isSupported = false;
+        }
+    }
+
+    return isSupported;
+}
+
 
 
 
@@ -239,6 +265,17 @@ async function execExists(key: string, value: any, onComplete: (res: boolean) =>
         onComplete(tr.result > 0);
         checkTask();
     }
+}
+
+
+
+function getBrowserVersion(agent: string, mark: string, length: number): number {
+    agent = agent.toLowerCase();
+    let posX = agent.indexOf(mark) + mark.length;
+    if (posX < mark.length) {
+        return 0;
+    }
+    return parseInt(agent.substring(posX, posX + length));
 }
 
 
